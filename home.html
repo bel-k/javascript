@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery-3.6.0.slim.min.js"> </script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styleaut.css"> 
+    <title>todoList</title>
+</head>
+<body>
+    <section>
+        <div class="color"></div>
+        <div class="color"></div>
+        <div class="color"></div>
+        <div class="color"></div>
+        <div class="box">
+            <div class="container">
+                 <nav style="height: 100px;">
+                    <div class="nav nav-tabs  justify-content-md-center  " id="nav-tab" role="tablist" >
+                        <button class="nav-link active" id="nav-signup-tab" data-bs-toggle="tab"
+                         data-bs-target="#nav-signup" type="button" role="tab" aria-controls="nav-signup" aria-selected="true">sign up</button>
+                
+              
+         
+                        <button class="nav-link" id="nav-login-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-login" type="button" role="tab" aria-controls="nav-login" aria-selected="false">login</button>
+
+
+                        <button class="nav-link" id="nav-unsub-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-unsub" type="button" role="tab" aria-controls="nav-unsub" aria-selected="false">Unsubscribe</button>
+                  
+                     </div>
+                </nav>
+            </div>     
+            <div class="container1">
+                <div class="tab-content" id="nav-tabcontent">
+                     <div class="tab-pane fade show active" id="nav-signup" role="tabpanel" aria-labelledby="nav-signup-tab">
+                         <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="signinput" required>
+                            <label for="signinput">Email</label>
+                        </div>
+                        <div class="form-floating  ">
+                             <input type="password" class="form-control" id="signpass" required>
+                             <label for="signpass">password</label>
+                        </div>
+                        <br><br>
+                        <button class="btn btn-outline-primary btn-lg"  type="button" id="signbtn">sign up</button>
+                        <input   type="checkbox" onclick="show()">   Show Password
+
+                        <br><br><br>
+                        <div id="signdiv" class="text-lg-start bg-warning" > <center><p  > </p></center>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="tab-pane fade " id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="loadinput" required>
+                            <label for="loadinput">Email</label>
+                        </div>
+                        <div class="form-floating  ">
+                            <input type="password" class="form-control" id="loadpass" required>
+                            <label for="loadpass">password</label>
+                        </div>
+                             <br><br>
+                            <button class="btn btn-outline-primary btn-lg"  type="button" id="loadbtn">login</button>
+          
+
+                                <br><br><br>
+                        <div id="retrieve" class="text-lg-start bg-warning"  >  <center><p  > </p></center>
+                        </div>
+                            <br>
+                    </div>
+     
+                    <div class="tab-pane fade " id="nav-unsub" role="tabpanel" aria-labelledby="nav-unsub-tab">
+                        <div class="form-floating mb-3"> 
+                            <input type="email" class="form-control" id="deletinput" required> 
+                            <label for="deletinput">Email</label>
+                        </div>
+                        <div class="form-floating  ">
+                            <input type="password" class="form-control" id="deletpass" required>
+                            <label for="deletpass">password</label>
+                        </div>
+                        <br><br>
+                        <button class="btn btn-outline-primary btn-lg"  type="button" id="deletbtn">Unsubscribe</button>
+
+                        <br><br><br>
+                        <div id="delete" class="text-lg-start bg-warning" > <center><p  > </p></center>
+                        </div>
+                        <br>
+                    </div>
+         
+        
+
+                </div>
+
+            </div>     
+        </div>
+    </section>
+
+
+<script>
+       
+       localStorage.setItem('session', 'false');
+
+    function show() {
+  var x = document.getElementById("signpass");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+const hash = function(str, seed = 0) {
+    let h1 = 0xdeadbeef ^ seed,
+        h2 = 0x41c6ce57 ^ seed;
+    for (let i = 0, ch; i < str.length; i++) {
+        ch = str.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+};
+        function store(){ //stores items in the localStorage
+    var email = document.getElementById('signinput').value;
+    var password = document.getElementById('signpass').value;  
+    if ((email == "") || (password == "")){
+        var paragraph = document.createElement("p");
+    var infor = document.createTextNode("empty field");
+    const element = document.getElementById("signdiv").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+     }
+     else {
+        var records = window.localStorage.getItem(email);
+        if  (records == null ) {
+        const user = {
+            email: email,
+            password:  hash (password),
+         }
+
+         window.localStorage.setItem(email,JSON.stringify(user));  
+         //converting object to string
+        var paragraph = document.createElement("p");
+        var infor = document.createTextNode("welcome !   ");
+        const element = document.getElementById("signdiv").children[0];
+        element.replaceChild(infor, element.childNodes[0]);} 
+        else {
+            var paragraph = document.createElement("p");
+        var infor = document.createTextNode("user already exists");
+        const element = document.getElementById("signdiv").children[0];
+         element.replaceChild(infor, element.childNodes[0]);
+        }
+
+          
+    }
+ }
+
+function retrieveRecords(){ //retrieves items in the localStorage
+     var email = document.getElementById('loadinput').value;
+     var password = document.getElementById('loadpass').value;
+     if ((email == "") || (password == "")){
+        var paragraph = document.createElement("p");
+    var infor = document.createTextNode("empty field");
+    const element = document.getElementById("retrieve").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+     }
+     else{
+
+    var records = window.localStorage.getItem(email);
+
+    var data = JSON.parse(records);
+   password = hash(password);
+
+    if (records == null) {
+     var paragraph = document.createElement("p");
+    var infor = document.createTextNode("  email does not exist ");
+    const element = document.getElementById("retrieve").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+
+    } 
+    else if (email == data.email && password == data.password) {
+    var paragraph = document.createElement("p");
+    var infor = document.createTextNode("Logged in");
+     const element = document.getElementById("retrieve").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+    localStorage.setItem('session', 'true');
+    window.location.href = "index.html";
+    
+        
+    } else {
+    var paragraph = document.createElement("p");
+    var infor = document.createTextNode("wrong password ! try again");
+    const element = document.getElementById("retrieve").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+    
+         
+    }
+}
+}
+
+
+
+
+   
+
+function removeuser(){  //deletes item from localStorage
+    var key = document.getElementById('deletinput').value;
+    var password = document.getElementById('deletpass').value;
+
+    if ((key == "") || (password == "")){
+        var paragraph = document.createElement("p");
+    var infor = document.createTextNode("empty field");
+    const element = document.getElementById("delete").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+     }
+     else{
+    var records = window.localStorage.getItem(key);
+
+    var data = JSON.parse(records);
+   password = hash(password);
+
+    if (records == null) {
+     var paragraph = document.createElement("p");
+    var infor = document.createTextNode("  email does not exist  ");
+    const element = document.getElementById("delete").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+
+    } 
+    else if (key == data.email && password == data.password) {
+    localStorage.removeItem(key)
+    var paragraph = document.createElement("p");
+    var infor = document.createTextNode("Unsubscribe ");
+     const element = document.getElementById("delete").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+    
+        
+    } else {
+    var paragraph = document.createElement("p");
+    var infor = document.createTextNode("wrong password ! try again");
+    const element = document.getElementById("delete").children[0];
+    element.replaceChild(infor, element.childNodes[0]);
+    
+         
+    }
+}
+
+}
+
+window.onload =function(){ //ensures the page is loaded before functions are executed.
+    document.getElementById("signbtn").onclick = store;
+  
+    document.getElementById("deletbtn").onclick = removeuser
+    document.getElementById("loadbtn").onclick = retrieveRecords
+}
+
+
+    </script>
+ 
+
+ 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>  
+  
+</body>
+</html>
+ 
